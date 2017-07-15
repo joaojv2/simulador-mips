@@ -9,6 +9,7 @@ class Montador():
         self.registradores = Registradores()
         self.palavrasMontadas = []
         self.labels = []
+        self.vetores = []
         self.tokenizer()
         self.montar()
 
@@ -35,10 +36,88 @@ class Montador():
         for palavra in self.palavras:
             string = []
 
-            if len(palavra) < 2:
+            if palavra[0] == 'syscall':
+                string.append('000000')
+                string.append('00000')
+                string.append('00000')
+                string.append('00000')
+                string.append('00000')
+                string.append('001100')
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif len(palavra) < 2:
                 string.append(palavra[0])
                 string.append(str(endereco - 1))
                 self.labels.append(string)
+
+            elif palavra[1] == '.' and palavra[2] == 'space':
+                vetor = [x for x in range(int(int(palavra[3]) / 4))]
+                self.vetores.append(vetor)
+
+            elif palavra[0] == 'sw':
+                string.append(str(bin(TipoI.sw.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('0000000000000000')
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'addi':
+                string.append(str(bin(TipoI.addi.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'addiu':
+                string.append(str(bin(TipoI.addiu.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'slti':
+                string.append(str(bin(TipoI.slti.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'sltiu':
+                string.append(str(bin(TipoI.sltiu.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'andi':
+                string.append(str(bin(TipoI.anddi.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'ori':
+                string.append(str(bin(TipoI.ori.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'xori':
+                string.append(str(bin(TipoI.xori.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                self.palavrasMontadas.append(string)
+                endereco += 1
 
             elif palavra[0] == 'li':
                 string.append(str(bin(TipoI.li.value)))
@@ -49,8 +128,16 @@ class Montador():
                 endereco += 1
 
             elif palavra[0] == 'bne':
-                print("OI")
                 string.append(str(bin(TipoI.bne.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('0000000000000000')
+                string.append(palavra[3])
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'beq':
+                string.append(str(bin(TipoI.beq.value)))
                 string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
                 string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
                 string.append('0000000000000000')
@@ -238,8 +325,31 @@ class Montador():
                 self.palavrasMontadas.append(string)
                 endereco += 1
 
+            elif palavra[0] == 'sll':
+                string.append('000000')
+                string.append('00000')
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                string.append(str(bin(TipoR.sll.value)))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            elif palavra[0] == 'srl':
+                string.append('000000')
+                string.append('00000')
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('{0:b}'.format(int(palavra[3])))
+                string.append(str(bin(TipoR.srl.value)))
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
     def getPalavrasMontadas(self):
         return self.palavrasMontadas
 
     def getLabels(self):
         return self.labels
+
+    def getVetor(self):
+        return self.vetores

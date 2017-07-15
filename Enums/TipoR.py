@@ -19,3 +19,5 @@ class TipoR(Enum):
     orr = 0b100101
     nor = 0b100111
     xor = 0b100110
+    sll = 0b000000
+    srl = 0b000010

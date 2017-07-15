@@ -4,10 +4,11 @@ from Computador.UnidadeControle import UnidadeControle
 from Computador.PC import PC
 
 class Processador():
-    def __init__(self):
+    def __init__(self, ttk):
         self.registradores = Registradores()
         self.memoria = Memoria()
         self.unidadeControle = UnidadeControle()
+        self.ttk = ttk
         self.PC = PC()
 
     def setRegistrador(self, nome, value):

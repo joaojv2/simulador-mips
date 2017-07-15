@@ -7,7 +7,6 @@ class UnidadeControle():
         self.palavra = []
 
     def recebePalavra(self, palavra, processador):
-        print(palavra)
         self.palavra = palavra
         self.processador = processador
         self.fazendoLogica()
@@ -20,7 +19,35 @@ class UnidadeControle():
         elif self.palavra[0] == '0b101':
             if ULA.diferenca(self.processador.getValorRegistrador(self.palavra[1]), self.processador.getValorRegistrador(self.palavra[2])):
                 self.processador.setPC(self.processador.getLabel(self.palavra[4]))
-        #add
+        #beq
+        elif self.palavra[0] == '0b100':
+            if ULA.diferenca(self.processador.getValorRegistrador(self.palavra[1]), self.processador.getValorRegistrador(self.palavra[2])) == False:
+                self.processador.setPC(self.processador.getLabel(self.palavra[4]))
+        #sw terminar
+        elif self.palavra[0] == '0b101011':
+            print("Oi")
+        #addi
+        elif self.palavra[0] == '0b1000':
+            self.processador.setRegistrador(self.palavra[2], ULA.somarImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #addiu
+        elif self.palavra[0] == '0b1001':
+            self.processador.setRegistrador(self.palavra[2], ULA.somarImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #slti
+        elif self.palavra[0] == '0b1010':
+            self.processador.setRegistrador(self.palavra[2], ULA.verificarMenorImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #sltiu
+        elif self.palavra[0] == '0b1011':
+            self.processador.setRegistrador(self.palavra[2], ULA.verificarMenorImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #andi
+        elif self.palavra[0] == '0b1100':
+            self.processador.setRegistrador(self.palavra[2], ULA.anddImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #ori
+        elif self.palavra[0] == '0b1101':
+            self.processador.setRegistrador(self.palavra[2], ULA.orrImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #xori
+        elif self.palavra[0] == '0b1110':
+            self.processador.setRegistrador(self.palavra[2], ULA.xorImmediate(self.processador.getValorRegistrador(self.palavra[1]), self.palavra[3]))
+        #add#
         elif self.palavra[5] == '0b100000':
             self.processador.setRegistrador(self.palavra[3], ULA.somar(self.processador.getValorRegistrador(self.palavra[1]), self.processador.getValorRegistrador(self.palavra[2])))
         #addu
@@ -74,3 +101,15 @@ class UnidadeControle():
         #xor
         elif self.palavra[5] == '0b100110':
             self.processador.setRegistrador(self.palavra[3], ULA.xor(self.processador.getValorRegistrador(self.palavra[1]), self.processador.getValorRegistrador(self.palavra[2])))
+        #sll
+        elif self.palavra[5] == '0b0':
+            self.processador.setRegistrador(self.palavra[3], ULA.shiftLeft(self.processador.getValorRegistrador(self.palavra[2]), self.palavra[4]))
+        #srl
+        elif self.palavra[5] == '0b10':
+            self.processador.setRegistrador(self.palavra[3], ULA.shiftRight(self.processador.getValorRegistrador(self.palavra[2]), self.palavra[4]))
+
+        #syscall
+        elif self.palavra[5] == '001100':
+            if int(self.processador.getValorRegistradorPorNome("$v0"), 16) == 1:
+                print(int(self.processador.getValorRegistradorPorNome("$a0"),16))
+                self.processador.ttk.setInput(int(self.processador.getValorRegistradorPorNome("$a0"),16))

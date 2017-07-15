@@ -9,7 +9,7 @@ class Application(tk.Frame):
 
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
-        self.processador = Processador()
+        self.processador = Processador(self)
 
         self.nome = tk.Text(master, width=95, height=25, )
         self.nome.grid(row=1, column=0, sticky=tk.W+tk.E+tk.N+tk.S, padx=5)
@@ -94,6 +94,9 @@ class Application(tk.Frame):
             pass
         finally:
             file.close()
+
+    def setInput(self, text):
+        self.input.insert('0.0', str(text))
 
 if __name__ == '__main__':
     root = tk.Tk()

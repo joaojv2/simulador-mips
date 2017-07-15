@@ -1,7 +1,7 @@
 class Registradores():
     def __init__(self):
         self.registradores = [[]]
-        self.value = 0
+        self.value = hex(0)
         self.criarRegistradores()
 
     def criarRegistradores(self):
