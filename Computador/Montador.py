@@ -23,7 +23,7 @@ class Montador():
               | \w+(?:-\w+)*        
               | \$?\d+(?:\.\d+)?%?  
               | \.\.\.              
-              | [][.;"'?()_`-]''')
+              | [][.;"'?_`-]''')
 
         for palavra in result:
             results = re.findall(pattern, palavra)
@@ -35,7 +35,8 @@ class Montador():
         endereco = 0
         for palavra in self.palavras:
             string = []
-
+            if palavra == None:
+                continue
             if palavra[0] == 'syscall':
                 string.append('000000')
                 string.append('00000')
@@ -54,6 +55,14 @@ class Montador():
             elif palavra[1] == '.' and palavra[2] == 'space':
                 vetor = [x for x in range(int(int(palavra[3]) / 4))]
                 self.vetores.append(vetor)
+
+            elif palavra[0] == 'la':
+                string.append(str(bin(TipoI.addi.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('0000000000000000')
+                self.palavrasMontadas.append(string)
+                endereco += 1
 
             elif palavra[0] == 'sw':
                 string.append(str(bin(TipoI.sw.value)))
@@ -344,6 +353,19 @@ class Montador():
                 string.append(str(bin(TipoR.srl.value)))
                 self.palavrasMontadas.append(string)
                 endereco += 1
+
+            elif palavra[0] == 'mul':
+                string.append(str(bin(TipoR.mul.value)))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[2]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[3]))))
+                string.append('{0:b}'.format(int(self.registradores.getRegistrador(palavra[1]))))
+                string.append('00000')
+                string.append('000010')
+                self.palavrasMontadas.append(string)
+                endereco += 1
+
+            else:
+                print(palavra)
 
     def getPalavrasMontadas(self):
         return self.palavrasMontadas

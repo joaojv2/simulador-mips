@@ -107,9 +107,13 @@ class UnidadeControle():
         #srl
         elif self.palavra[5] == '0b10':
             self.processador.setRegistrador(self.palavra[3], ULA.shiftRight(self.processador.getValorRegistrador(self.palavra[2]), self.palavra[4]))
-
+        #mul
+        elif self.palavra[0] == '0b11100':
+            self.processador.setRegistrador(self.palavra[3], ULA.multiplicar(self.processador.getValorRegistrador(self.palavra[1]), self.processador.getValorRegistrador(self.palavra[2])))
         #syscall
         elif self.palavra[5] == '001100':
             if int(self.processador.getValorRegistradorPorNome("$v0"), 16) == 1:
-                print(int(self.processador.getValorRegistradorPorNome("$a0"),16))
                 self.processador.ttk.setInput(int(self.processador.getValorRegistradorPorNome("$a0"),16))
+
+            elif int(self.processador.getValorRegistradorPorNome("$v0"), 16) == 5:
+                print(self.processador.ttk.popup_bonus())

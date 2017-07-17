@@ -21,3 +21,4 @@ class TipoR(Enum):
     xor = 0b100110
     sll = 0b000000
     srl = 0b000010
+    mul = 0b011100

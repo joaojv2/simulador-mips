@@ -11,10 +11,10 @@ class Application(tk.Frame):
         tk.Frame.__init__(self, master)
         self.processador = Processador(self)
 
-        self.nome = tk.Text(master, width=95, height=25, )
+        self.nome = tk.Text(master, width=95, height=25 )
         self.nome.grid(row=1, column=0, sticky=tk.W+tk.E+tk.N+tk.S, padx=5)
 
-        self.input = tk.Text(master, width=95, height=12)
+        self.input = tk.Text(master, width=95, height=12, state='disable')
         self.input.grid(row=2, column=0, sticky=tk.W+tk.E+tk.N+tk.S, pady=10, padx=5)
 
         self.registradores = self.processador.getRegistradores()
@@ -96,7 +96,21 @@ class Application(tk.Frame):
             file.close()
 
     def setInput(self, text):
+        self.input['state'] = 'normal'
         self.input.insert('0.0', str(text))
+        self.input['state'] = 'disable'
+
+
+    def popup_bonus(self):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+        l = tk.Text(win, width=10, height=10, )
+        l.grid(row=0, column=0)
+
+        b = ttk.Button(win, text="Okay")
+        b.grid(row=1, column=0)
+
 
 if __name__ == '__main__':
     root = tk.Tk()
